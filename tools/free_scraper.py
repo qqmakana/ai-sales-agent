@@ -306,41 +306,38 @@ def scrape_leads_free(niche: str, location: str = "South Africa", max_leads: int
     """
     Main function: Scrape leads for FREE using DuckDuckGo, Bing, and website scraping.
     Returns list of leads with name, email, website, phone, niche.
+    FAST VERSION - skips slow email checks to avoid timeouts.
     """
     all_leads = []
-    seen_websites = set()
     seen_domains = set()
     
-    print(f"[SCRAPER] Starting FREE lead search for '{niche}' in '{location}'...")
+    print(f"[SCRAPER] Starting FAST lead search for '{niche}' in '{location}'...")
     
-    # Generate search queries
+    # Generate search queries - use only 2 for speed
     queries = generate_business_search_queries(niche, location)
     
-    for query in queries[:4]:  # Use up to 4 queries
+    for query in queries[:2]:  # Only 2 queries for speed
         print(f"[SCRAPER] Searching: {query}")
         
-        # Small delay between searches
-        time.sleep(random.uniform(1, 2))
+        # Try Bing first (faster and more reliable)
+        results = scrape_bing_search(query, num_results=15)
         
-        # Try DuckDuckGo first (most reliable for scraping)
-        results = scrape_duckduckgo(query, num_results=10)
-        
-        # Fallback to Bing if DuckDuckGo fails
+        # Fallback to DuckDuckGo
         if not results:
-            print(f"[SCRAPER] Trying Bing...")
-            results = scrape_bing_search(query, num_results=10)
+            print(f"[SCRAPER] Trying DuckDuckGo...")
+            results = scrape_duckduckgo(query, num_results=15)
         
         for result in results:
             website = result.get('website', '')
             
-            # Skip duplicates and invalid URLs
-            if not website or website in seen_websites:
+            # Skip invalid URLs
+            if not website:
                 continue
             
             # Skip common non-business sites
             skip_domains = ['facebook.com', 'linkedin.com', 'twitter.com', 'youtube.com', 
                           'wikipedia.org', 'instagram.com', 'tiktok.com', 'pinterest.com',
-                          'yelp.com', 'tripadvisor.com', 'amazon.com', 'ebay.com']
+                          'yelp.com', 'tripadvisor.com', 'amazon.com', 'ebay.com', 'bing.com']
             
             try:
                 domain = urlparse(website).netloc.lower().replace('www.', '')
@@ -351,8 +348,6 @@ def scrape_leads_free(niche: str, location: str = "South Africa", max_leads: int
                 seen_domains.add(domain)
             except:
                 continue
-                
-            seen_websites.add(website)
             
             # Extract domain for company name if needed
             name = result.get('name', '')
@@ -361,37 +356,18 @@ def scrape_leads_free(niche: str, location: str = "South Africa", max_leads: int
                 name = parsed.netloc.replace('www.', '').split('.')[0].title()
             
             # Clean up name
-            name = name.replace(' - Home', '').replace(' | Home', '').strip()
+            name = name.replace(' - Home', '').replace(' | Home', '').replace(' - Google Search', '').strip()
+            if len(name) > 80:
+                name = name[:80]
             
             lead = {
-                'name': name,
+                'name': name or 'Business',
                 'website': website,
-                'email': '',
+                'email': '',  # Skip slow email checking
                 'phone': '',
                 'niche': niche,
                 'source': 'web_search'
             }
-            
-            # Try to find email from website
-            if website:
-                print(f"[SCRAPER] Checking {website[:50]}... for emails")
-                time.sleep(random.uniform(0.5, 1.5))  # Be polite
-                
-                try:
-                    emails = scrape_website_for_emails(website)
-                    if emails:
-                        # Prefer info@, contact@, sales@ emails
-                        priority_prefixes = ['info', 'contact', 'sales', 'hello', 'enquiries', 'admin', 'support']
-                        best_email = emails[0]
-                        for email in emails:
-                            prefix = email.split('@')[0].lower()
-                            if any(p in prefix for p in priority_prefixes):
-                                best_email = email
-                                break
-                        lead['email'] = best_email
-                        print(f"[SCRAPER] Found email: {best_email}")
-                except Exception as e:
-                    print(f"[SCRAPER] Error checking website: {str(e)[:50]}")
             
             all_leads.append(lead)
             
@@ -401,52 +377,9 @@ def scrape_leads_free(niche: str, location: str = "South Africa", max_leads: int
         if len(all_leads) >= max_leads:
             break
     
-    # Also try Yellow Pages if we need more leads
-    if len(all_leads) < max_leads:
-        print(f"[SCRAPER] Checking Yellow Pages SA...")
-        yp_results = scrape_yellow_pages_sa(niche, location, max_leads - len(all_leads))
-        
-        for yp in yp_results:
-            website = yp.get('website', '')
-            if website and website in seen_websites:
-                continue
-            if website:
-                seen_websites.add(website)
-            
-            lead = {
-                'name': yp.get('name', ''),
-                'website': website,
-                'email': '',
-                'phone': yp.get('phone', ''),
-                'niche': niche,
-                'source': 'yellow_pages'
-            }
-            
-            # Try to get email from website
-            if website:
-                time.sleep(random.uniform(0.5, 1))
-                try:
-                    emails = scrape_website_for_emails(website)
-                    if emails:
-                        lead['email'] = emails[0]
-                except:
-                    pass
-            
-            all_leads.append(lead)
-            
-            if len(all_leads) >= max_leads:
-                break
+    print(f"[SCRAPER] Done! Found {len(all_leads)} leads")
     
-    # Filter to only leads with emails (most valuable)
-    leads_with_email = [l for l in all_leads if l.get('email')]
-    leads_without_email = [l for l in all_leads if not l.get('email')]
-    
-    # Return leads with emails first, then others
-    final_leads = leads_with_email + leads_without_email
-    
-    print(f"[SCRAPER] Done! Found {len(final_leads)} leads ({len(leads_with_email)} with emails)")
-    
-    return final_leads[:max_leads]
+    return all_leads[:max_leads]
 
 
 # For testing
