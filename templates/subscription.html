@@ -86,12 +86,9 @@
                     Current Plan
                 </button>
             {% else %}
-                <form action="{{ url_for('create_checkout_session') }}" method="POST">
-                    <input type="hidden" name="tier" value="pro">
-                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">
-                        Upgrade to Pro - R499/mo
-                    </button>
-                </form>
+                <button onclick="showBankDetails('pro')" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">
+                    💳 Pay R499/mo via Bank Transfer
+                </button>
             {% endif %}
         </div>
     </div>
@@ -127,12 +124,10 @@
             </div>
         </div>
         
-        <form action="{{ url_for('buy_lead_pack') }}" method="POST">
-            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
-                🚀 Buy 50 Leads - R99.99
-            </button>
-        </form>
-        <p style="text-align: center; font-size: 0.8rem; color: #94a3b8; margin-top: 0.75rem;">One-time payment • Instant delivery • Works on Free or Pro plan</p>
+        <button onclick="showBankDetails('leads')" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+            💳 Buy 50 Leads - R99 via Bank Transfer
+        </button>
+        <p style="text-align: center; font-size: 0.8rem; color: #94a3b8; margin-top: 0.75rem;">One-time payment • Activated within 24h • Works on Free or Pro plan</p>
     </div>
 
     <!-- Value Proposition -->
@@ -156,7 +151,111 @@
 
     <!-- Trust Badge -->
     <div style="text-align: center; margin-top: 2rem; color: #94a3b8; font-size: 0.85rem;">
-        🔒 Secure payment via LemonSqueezy. Cancel anytime.
+        🔒 Secure payment • Cancel anytime • Activated within 24 hours
     </div>
 </div>
+
+<!-- Bank Details Modal -->
+<div id="bankModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; padding: 2rem;">
+    <div style="max-width: 500px; margin: 3rem auto; background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin: 0;">💳 Bank Transfer Payment</h2>
+            <button onclick="closeBankModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #94a3b8;">×</button>
+        </div>
+        
+        <div id="bankDetailsContent"></div>
+    </div>
+</div>
+
+<script>
+function showBankDetails(type) {
+    let amount, product, reference;
+    
+    if (type === 'pro') {
+        amount = 'R499';
+        product = 'Pro Monthly Subscription';
+        reference = 'PRO-' + '{{ user.id }}';
+    } else if (type === 'leads') {
+        amount = 'R99';
+        product = '50 Leads Pack';
+        reference = 'LEADS-' + '{{ user.id }}';
+    }
+    
+    document.getElementById('bankDetailsContent').innerHTML = `
+        <div style="background: linear-gradient(135deg, #10b981, #3b82f6); color: white; padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: center;">
+            <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">Total Amount</div>
+            <div style="font-size: 2.5rem; font-weight: 900;">${amount}</div>
+            <div style="font-size: 0.85rem; opacity: 0.9; margin-top: 0.5rem;">${product}</div>
+        </div>
+        
+        <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
+            <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Banking Details:</h3>
+            
+            <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.25rem;">Bank Name</div>
+                <div style="font-weight: 700; color: #1e293b;">Capitec Bank</div>
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.25rem;">Account Name</div>
+                <div style="font-weight: 700; color: #1e293b;">Qaqambile Makana</div>
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.25rem;">Account Type</div>
+                <div style="font-weight: 700; color: #1e293b;">Savings Account</div>
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.25rem;">Account Number</div>
+                <div style="font-weight: 700; color: #1e293b; font-size: 1.1rem;">2406787660</div>
+                <button onclick="copyToClipboard('2406787660')" style="background: none; border: 1px solid #e2e8f0; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; margin-top: 0.25rem;">Copy</button>
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 0.25rem;">Reference (IMPORTANT)</div>
+                <div style="font-weight: 700; color: #dc2626; font-size: 1.1rem;">${reference}</div>
+                <button onclick="copyToClipboard('${reference}')" style="background: none; border: 1px solid #e2e8f0; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; margin-top: 0.25rem;">Copy</button>
+            </div>
+        </div>
+        
+        <div style="background: #fff7ed; border: 1px solid #fed7aa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+            <div style="font-weight: 700; color: #9a3412; margin-bottom: 0.5rem;">📋 Next Steps:</div>
+            <ol style="margin: 0; padding-left: 1.25rem; color: #9a3412; font-size: 0.9rem;">
+                <li>Transfer ${amount} to the account above</li>
+                <li><strong>Use "${reference}" as reference</strong></li>
+                <li>Wait 24h for activation</li>
+                <li>We'll email you when it's ready!</li>
+            </ol>
+        </div>
+        
+        <button onclick="closeBankModal()" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">
+            Got It! I'll Pay Now
+        </button>
+        
+        <p style="text-align: center; font-size: 0.75rem; color: #94a3b8; margin-top: 0.75rem;">
+            Activation within 24 hours • Email: solarcouple@gmail.com
+        </p>
+    `;
+    
+    document.getElementById('bankModal').style.display = 'block';
+}
+
+function closeBankModal() {
+    document.getElementById('bankModal').style.display = 'none';
+}
+
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert('✅ Copied: ' + text);
+    });
+}
+
+// Close modal when clicking outside
+document.getElementById('bankModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeBankModal();
+    }
+});
+</script>
 {% endblock %}
