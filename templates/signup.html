@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - AI Sales Agent{% endblock %}
+
+{% block content_no_auth %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>Start Closing More Deals</h2>
+        <p>Create your free account - no credit card required</p>
+        <form method="POST" action="{{ url_for('signup') }}">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Create a password" minlength="6">
+            </div>
+            <button type="submit" class="btn btn-primary">Create Free Account</button>
+        </form>
+        <p class="auth-link">Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+    </div>
+</div>
+{% endblock %}
+

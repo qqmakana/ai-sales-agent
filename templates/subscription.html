@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Upgrade - AI Sales Agent{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto;">
+    
+    <!-- Header -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h1 style="font-size: 2rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem;">Choose Your Plan</h1>
+        <p style="color: #64748b;">Automated lead generation for Security & Solar companies</p>
+        <p style="font-size: 0.9rem; color: #94a3b8; margin-top: 0.5rem;">
+            Current plan: <strong class="text-gradient">{{ user.subscription_tier|title }}</strong>
+        </p>
+    </div>
+
+    <!-- Plans - 2 columns now -->
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
+        
+        <!-- Free Plan -->
+        <div class="glass-card" style="text-align: center; padding: 2rem; {% if user.subscription_tier == 'free' %}border: 2px solid var(--primary-green);{% endif %}">
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem;">Free</h3>
+            <div style="font-size: 2.5rem; font-weight: 900; color: #1e293b; margin-bottom: 1rem;">R0<span style="font-size: 1rem; color: #94a3b8;">/mo</span></div>
+            
+            <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem; text-align: left;">
+                <li style="padding: 0.5rem 0; color: #475569; display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--primary-green);">✓</span> 3 automations/month
+                </li>
+                <li style="padding: 0.5rem 0; color: #475569; display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--primary-green);">✓</span> Find Security & Solar leads
+                </li>
+                <li style="padding: 0.5rem 0; color: #475569; display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--primary-green);">✓</span> Send automated emails
+                </li>
+                <li style="padding: 0.5rem 0; color: #475569; display: flex; align-items: center; gap: 8px;">
+                    <span style="color: #cbd5e1;">✗</span> <span style="color: #94a3b8;">Emails hidden (upgrade to see)</span>
+                </li>
+                <li style="padding: 0.5rem 0; color: #475569; display: flex; align-items: center; gap: 8px;">
+                    <span style="color: #cbd5e1;">✗</span> <span style="color: #94a3b8;">No CSV export</span>
+                </li>
+            </ul>
+
+            {% if user.subscription_tier == 'free' %}
+                <button disabled style="width: 100%; padding: 0.75rem; background: #e2e8f0; color: #94a3b8; border: none; border-radius: 12px; font-weight: 700;">
+                    Current Plan
+                </button>
+            {% else %}
+                <button disabled style="width: 100%; padding: 0.75rem; background: #f1f5f9; color: #94a3b8; border: none; border-radius: 12px; font-weight: 700;">
+                    Free
+                </button>
+            {% endif %}
+        </div>
+
+        <!-- Pro Plan -->
+        <div class="glass-card" style="text-align: center; padding: 2rem; border: 2px solid var(--primary-purple); box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);">
+            <div style="background: var(--rainbow-gradient); color: white; padding: 4px 12px; border-radius: 100px; font-size: 0.7rem; font-weight: 800; display: inline-block; margin-bottom: 1rem;">BEST VALUE</div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem;">Pro</h3>
+            <div style="font-size: 2.5rem; font-weight: 900; color: #1e293b; margin-bottom: 1rem;">R499<span style="font-size: 1rem; color: #94a3b8;">/mo</span></div>
+            
+            <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem; text-align: left;">
+                <li style="padding: 0.5rem 0; color: #475569; display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--primary-green);">✓</span> <strong>Unlimited</strong> automations
+                </li>
+                <li style="padding: 0.5rem 0; color: #475569; display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--primary-green);">✓</span> Find Security & Solar leads
+                </li>
+                <li style="padding: 0.5rem 0; color: #475569; display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--primary-green);">✓</span> Send automated emails
+                </li>
+                <li style="padding: 0.5rem 0; color: #475569; display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--primary-green);">✓</span> <strong>Full email addresses</strong> visible
+                </li>
+                <li style="padding: 0.5rem 0; color: #475569; display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--primary-green);">✓</span> <strong>Export leads to CSV</strong>
+                </li>
+                <li style="padding: 0.5rem 0; color: #475569; display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--primary-green);">✓</span> AI personalized pitches
+                </li>
+                <li style="padding: 0.5rem 0; color: #475569; display: flex; align-items: center; gap: 8px;">
+                    <span style="color: var(--primary-green);">✓</span> Schedule daily/weekly runs
+                </li>
+            </ul>
+
+            {% if user.subscription_tier == 'pro' or user.subscription_tier == 'business' %}
+                <button disabled style="width: 100%; padding: 0.75rem; background: #e2e8f0; color: #94a3b8; border: none; border-radius: 12px; font-weight: 700;">
+                    Current Plan
+                </button>
+            {% else %}
+                <form action="{{ url_for('create_checkout_session') }}" method="POST">
+                    <input type="hidden" name="tier" value="pro">
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">
+                        Upgrade to Pro - R499/mo
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- BUY EXTRA LEADS - One-time Purchase -->
+    <div class="glass-card" style="margin-top: 2rem; padding: 2rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1)); border: 2px solid rgba(16, 185, 129, 0.3);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+                    <span style="font-size: 1.5rem;">🎯</span>
+                    <h3 style="font-size: 1.25rem; font-weight: 800; color: #1e293b; margin: 0;">Need More Leads?</h3>
+                </div>
+                <p style="color: #64748b; margin: 0;">Buy a one-time lead pack. No subscription required.</p>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 2rem; font-weight: 900; color: var(--primary-green);">R99</div>
+                <div style="font-size: 0.8rem; color: #64748b;">for 50 leads</div>
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; padding: 1rem; background: white; border-radius: 12px;">
+            <div style="text-align: center; padding: 0.5rem;">
+                <div style="font-weight: 800; color: #1e293b;">50 Leads</div>
+                <div style="font-size: 0.8rem; color: #64748b;">Verified contacts</div>
+            </div>
+            <div style="text-align: center; padding: 0.5rem; border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0;">
+                <div style="font-weight: 800; color: #1e293b;">Full Details</div>
+                <div style="font-size: 0.8rem; color: #64748b;">Emails visible</div>
+            </div>
+            <div style="text-align: center; padding: 0.5rem;">
+                <div style="font-weight: 800; color: #1e293b;">No Expiry</div>
+                <div style="font-size: 0.8rem; color: #64748b;">Use anytime</div>
+            </div>
+        </div>
+        
+        <form action="{{ url_for('buy_lead_pack') }}" method="POST">
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                🚀 Buy 50 Leads - R99.99
+            </button>
+        </form>
+        <p style="text-align: center; font-size: 0.8rem; color: #94a3b8; margin-top: 0.75rem;">One-time payment • Instant delivery • Works on Free or Pro plan</p>
+    </div>
+
+    <!-- Value Proposition -->
+    <div class="glass-card" style="margin-top: 2rem; padding: 1.5rem; text-align: center;">
+        <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">💰 Pro pays for itself with just 1 deal</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
+            <div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-purple);">R499</div>
+                <div style="font-size: 0.8rem; color: #64748b;">Monthly cost</div>
+            </div>
+            <div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-blue);">1 lead</div>
+                <div style="font-size: 0.8rem; color: #64748b;">To break even</div>
+            </div>
+            <div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--primary-green);">R25,000+</div>
+                <div style="font-size: 0.8rem; color: #64748b;">Avg deal value</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trust Badge -->
+    <div style="text-align: center; margin-top: 2rem; color: #94a3b8; font-size: 0.85rem;">
+        🔒 Secure payment via LemonSqueezy. Cancel anytime.
+    </div>
+</div>
+{% endblock %}

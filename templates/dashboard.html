@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - AI Sales Agent{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    
+    <!-- Welcome Header -->
+    <div style="margin-bottom: 2rem;">
+        <h1 style="font-size: 2rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem;">
+            Welcome back! 👋
+        </h1>
+        <p style="color: #64748b;">What would you like to do today?</p>
+    </div>
+
+    <!-- Two Main Actions -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+        
+        <!-- Send Email Card -->
+        <a href="{{ url_for('create_automation') }}?type=email" style="text-decoration: none;">
+            <div class="glass-card" style="text-align: center; padding: 2.5rem; cursor: pointer; transition: all 0.3s; border: 2px solid transparent;" 
+                 onmouseover="this.style.borderColor='var(--primary-blue)'; this.style.transform='translateY(-5px)'" 
+                 onmouseout="this.style.borderColor='transparent'; this.style.transform='none'">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📧</div>
+                <h2 style="font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem;">Send Email</h2>
+                <p style="color: #64748b; font-size: 0.9rem;">Send test emails, notifications, or reminders</p>
+            </div>
+        </a>
+
+        <!-- Find Leads Card -->
+        <a href="{{ url_for('create_automation') }}?type=leads" style="text-decoration: none;">
+            <div class="glass-card" style="text-align: center; padding: 2.5rem; cursor: pointer; transition: all 0.3s; border: 2px solid transparent;"
+                 onmouseover="this.style.borderColor='var(--primary-green)'; this.style.transform='translateY(-5px)'" 
+                 onmouseout="this.style.borderColor='transparent'; this.style.transform='none'">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+                <h2 style="font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem;">Find Leads</h2>
+                <p style="color: #64748b; font-size: 0.9rem;">Search for business contacts by industry & location</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="glass-card" style="margin-bottom: 2rem;">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #64748b; margin-bottom: 1rem;">📊 Your Stats</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
+            <div>
+                <div style="font-size: 2rem; font-weight: 900; color: var(--primary-purple);">{{ lead_stats.leads_found }}</div>
+                <div style="font-size: 0.85rem; color: #64748b;">Leads Found</div>
+            </div>
+            <div>
+                <div style="font-size: 2rem; font-weight: 900; color: var(--primary-blue);">{{ lead_stats.pitches_sent }}</div>
+                <div style="font-size: 0.85rem; color: #64748b;">Emails Sent</div>
+            </div>
+            <div>
+                <div style="font-size: 2rem; font-weight: 900; color: var(--primary-green);">{{ automations|length }}</div>
+                <div style="font-size: 0.85rem; color: #64748b;">Automations</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Calculator -->
+    <div class="glass-card" style="margin-bottom: 2rem;">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #64748b; margin-bottom: 1rem;">💰 Revenue Calculator (Security + Solar)</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+                <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Leads per month</label>
+                <input id="calc-leads" type="number" min="1" value="20"
+                    style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; background: white; color: #1e293b;">
+            </div>
+            <div>
+                <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Close rate (%)</label>
+                <input id="calc-close" type="number" min="1" max="100" value="15"
+                    style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; background: white; color: #1e293b;">
+            </div>
+            <div>
+                <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Avg deal value (R)</label>
+                <input id="calc-value" type="number" min="1000" value="25000"
+                    style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; background: white; color: #1e293b;">
+            </div>
+            <div>
+                <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Monthly revenue (est.)</label>
+                <div id="calc-output" style="width: 100%; padding: 0.9rem; border-radius: 12px; background: #f8fafc; border: 2px solid #e2e8f0; font-weight: 800; color: #16a34a;">
+                    R 75,000
+                </div>
+            </div>
+        </div>
+        <p style="font-size: 0.8rem; color: #64748b; margin-top: 0.75rem;">Estimate only. Results vary by niche and sales process.</p>
+    </div>
+
+    <!-- ROI Snapshot -->
+    <div class="glass-card" style="margin-bottom: 2rem;">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #64748b; margin-bottom: 1rem;">📈 ROI Snapshot</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align:center;">
+            <div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #1e293b;">{{ lead_stats.leads_found }}</div>
+                <div style="font-size: 0.85rem; color: #64748b;">Leads this month</div>
+            </div>
+            <div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #1e293b;">12%</div>
+                <div style="font-size: 0.85rem; color: #64748b;">Est. close rate</div>
+            </div>
+            <div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #16a34a;">R {{ est_monthly_revenue | int | string | replace(",", " ") }}</div>
+                <div style="font-size: 0.85rem; color: #64748b;">Est. monthly revenue</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Leads -->
+    {% if recent_leads %}
+    <div class="glass-card" style="margin-bottom: 2rem;">
+        <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 1rem;">
+            <h3 style="font-size: 1rem; font-weight: 700; color: #64748b;">📇 Recent Leads</h3>
+            <a href="{{ url_for('leads') }}" class="btn btn-secondary" style="font-size: 0.8rem;">View All</a>
+        </div>
+        {% for lead in recent_leads %}
+            <div style="background: white; padding: 0.9rem 1rem; border-radius: 12px; margin-bottom: 0.6rem; border: 1px solid #f1f5f9;">
+                <div style="display:flex; justify-content: space-between; align-items:center;">
+                    <div>
+                        <div style="font-weight: 700; color: #1e293b;">{{ lead.name }}</div>
+                        <div style="font-size: 0.8rem; color: #64748b;">{{ lead.niche }}</div>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #64748b;">{{ lead.website }}</div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Scheduled Automations -->
+    {% set scheduled = [] %}
+    {% for a in automations %}
+        {% if a.frequency != 'once' and a.is_active %}
+            {% set _ = scheduled.append(a) %}
+        {% endif %}
+    {% endfor %}
+    
+    {% if scheduled %}
+    <div class="glass-card" style="margin-bottom: 2rem;">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #64748b; margin-bottom: 1rem;">⏰ Scheduled Automations</h3>
+        
+        {% for automation in scheduled[:3] %}
+        <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 1rem; border-radius: 12px; margin-bottom: 0.75rem; border: 1px solid #bae6fd;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: 700; color: #0369a1; font-size: 0.95rem;">{{ automation.goal[:40] }}{% if automation.goal|length > 40 %}...{% endif %}</div>
+                    <div style="font-size: 0.8rem; color: #0284c7;">
+                        {{ automation.frequency|title }} at {{ automation.scheduled_time or '09:00' }}
+                        {% if automation.run_count and automation.run_count > 0 %} • Ran {{ automation.run_count }} time(s){% endif %}
+                    </div>
+                </div>
+                <span style="background: #dbeafe; color: #1d4ed8; padding: 4px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 700;">Active</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Recent Activity -->
+    <div class="glass-card">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #64748b; margin-bottom: 1rem;">📋 Recent Activity</h3>
+        
+        {% set completed = [] %}
+        {% for a in automations %}
+            {% if a.status in ['completed', 'failed'] %}
+                {% set _ = completed.append(a) %}
+            {% endif %}
+        {% endfor %}
+        
+        {% if completed %}
+            {% for automation in completed[:5] %}
+            <div style="background: white; padding: 1rem; border-radius: 12px; margin-bottom: 0.75rem; border: 1px solid #f1f5f9;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem;">{{ automation.goal[:50] }}{% if automation.goal|length > 50 %}...{% endif %}</div>
+                        <div style="font-size: 0.8rem; color: #94a3b8;">{{ automation.created_at.strftime('%d %b %Y, %H:%M') }}</div>
+                    </div>
+                    {% if automation.status == 'completed' %}
+                    <span style="background: #d1fae5; color: #059669; padding: 4px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 700;">Done</span>
+                    {% elif automation.status == 'failed' %}
+                    <span style="background: #fee2e2; color: #dc2626; padding: 4px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 700;">Failed</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div style="text-align: center; padding: 2rem; color: #94a3b8;">
+                <p>No activity yet. Send an email or find leads to get started!</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+function updateRevenue() {
+    const leads = parseFloat(document.getElementById('calc-leads')?.value || '0');
+    const closeRate = parseFloat(document.getElementById('calc-close')?.value || '0') / 100;
+    const value = parseFloat(document.getElementById('calc-value')?.value || '0');
+    const revenue = Math.max(0, Math.round(leads * closeRate * value));
+    const formatted = revenue.toLocaleString('en-ZA');
+    const output = document.getElementById('calc-output');
+    if (output) output.textContent = `R ${formatted}`;
+}
+document.addEventListener('DOMContentLoaded', () => {
+    ['calc-leads','calc-close','calc-value'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', updateRevenue);
+    });
+    updateRevenue();
+});
+</script>
+{% endblock %}

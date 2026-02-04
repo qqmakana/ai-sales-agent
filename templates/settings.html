@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - AI Sales Agent{% endblock %}
+
+{% block content %}
+<div class="settings-page">
+    <div class="container" style="max-width: 800px;">
+        <div class="section-header" style="margin-bottom: 2rem;">
+            <div>
+                <h1 style="font-size: 2.5rem; font-weight: 900; color: #1e293b; letter-spacing: -1.5px;">Settings</h1>
+                <p style="color: #64748b;">Manage your account, security, and billing preferences.</p>
+            </div>
+        </div>
+
+        <!-- Builder Mode Notice -->
+        <div class="glass-card" style="border: 1px solid #dbeafe; background: rgba(219, 234, 254, 0.35);">
+            <div style="font-weight: 800; color: #1d4ed8; margin-bottom: 0.35rem;">Builder Mode: Enabled</div>
+            <div style="font-size: 0.9rem; color: #2563eb;">Your account has unlimited automations for testing.</div>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="glass-card">
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                <span>👤</span> Profile Information
+            </h2>
+            <form>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Email Address</label>
+                    <input type="email" value="{{ current_user.email }}" disabled 
+                        style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 0.75rem; width: 100%; margin-top: 0.5rem; color: #94a3b8;">
+                    <small style="color: #94a3b8; display: block; margin-top: 0.5rem;">Your email is used for login and notifications.</small>
+                </div>
+                <button type="button" class="btn btn-secondary" style="font-size: 0.85rem;">Update Profile</button>
+            </form>
+        </div>
+
+        <!-- Billing Section -->
+        <div class="glass-card">
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                <span>💳</span> Billing & Subscription
+            </h2>
+            <div style="background: #f8fafc; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: 800; color: #1e293b;">Current Plan: <span class="text-gradient">{{ current_user.subscription_tier|title }}</span></div>
+                    <div style="font-size: 0.85rem; color: #64748b; margin-top: 0.25rem;">Next billing date: Feb 27, 2026</div>
+                </div>
+                <a href="{{ url_for('subscription') }}" class="btn btn-primary" style="font-size: 0.85rem;">Manage Plan</a>
+            </div>
+        </div>
+
+        <!-- Security Section -->
+        <div class="glass-card">
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                <span>🔒</span> Security
+            </h2>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: 700; color: #1e293b;">Change Password</div>
+                    <div style="font-size: 0.85rem; color: #64748b;">Keep your account secure with a strong password.</div>
+                </div>
+                <button type="button" class="btn btn-secondary" style="font-size: 0.85rem;">Change</button>
+            </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="glass-card" style="border: 1px solid #fee2e2; background: rgba(254, 226, 226, 0.2);">
+            <h2 style="font-size: 1.25rem; font-weight: 800; color: #dc2626; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                <span>⚠️</span> Danger Zone
+            </h2>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-weight: 700; color: #b91c1c;">Delete Account</div>
+                    <div style="font-size: 0.85rem; color: #ef4444;">Once deleted, your leads and data cannot be recovered.</div>
+                </div>
+                <button type="button" class="btn btn-secondary" style="color: #dc2626; border-color: #fecaca; font-size: 0.85rem;">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

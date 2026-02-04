@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}AI Sales Agent - Get More Clients on Autopilot{% endblock %}
+
+{% block content_no_auth %}
+<!-- HERO SECTION - Eye-catching for Social Media -->
+<div class="hero" style="min-height: 85vh; padding-top: 4rem;">
+    <div class="container" style="max-width: 900px;">
+        <!-- Trust Badge -->
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); padding: 8px 16px; border-radius: 100px; margin-bottom: 1.5rem;">
+            <span style="color: #10b981;">✓</span>
+            <span style="color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 600;">Trusted by 50+ Security & Solar Companies</span>
+        </div>
+        
+        <h1 style="font-size: clamp(2.8rem, 7vw, 4.5rem); line-height: 1.05;">Get More Clients<br><span class="text-gradient">On Autopilot</span></h1>
+        
+        <p class="subtitle" style="font-size: 1.25rem; margin-bottom: 1rem;">
+            AI finds leads. AI sends emails. You close deals.
+        </p>
+        <p style="color: rgba(255,255,255,0.6); font-size: 1rem; margin-bottom: 2rem;">
+            Built for Security & Solar companies in South Africa
+        </p>
+        
+        <!-- MAIN CTA - Big Shop Now Button -->
+        <div class="cta-buttons" style="flex-direction: column; gap: 1rem; align-items: center;">
+            <a href="{{ url_for('signup') }}" class="btn btn-primary" style="padding: 1.25rem 3rem; font-size: 1.3rem; font-weight: 800; border-radius: 16px; box-shadow: 0 20px 60px rgba(255, 0, 128, 0.4); animation: pulse-btn 2s infinite;">
+                🚀 Start Free Now
+            </a>
+            <span style="color: rgba(255,255,255,0.5); font-size: 0.9rem;">No credit card required • Setup in 2 minutes</span>
+        </div>
+        
+        <!-- Social Proof Numbers -->
+        <div style="display: flex; justify-content: center; gap: 3rem; margin-top: 3rem; flex-wrap: wrap;">
+            <div style="text-align: center;">
+                <div style="font-size: 2.5rem; font-weight: 900; color: white;">500+</div>
+                <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Leads Generated</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 2.5rem; font-weight: 900; color: white;">R2M+</div>
+                <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Revenue Created</div>
+            </div>
+            <div style="text-align: center;">
+                <div style="font-size: 2.5rem; font-weight: 900; color: white;">24/7</div>
+                <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Works While You Sleep</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- HOW IT WORKS - Simple 3 Steps -->
+<div class="features" style="padding: 4rem 2rem; background: rgba(255,255,255,0.02);">
+    <div class="container">
+        <h2 style="margin-bottom: 1rem;">How It Works</h2>
+        <p style="text-align: center; color: rgba(255,255,255,0.6); margin-bottom: 3rem;">3 simple steps to more clients</p>
+        
+        <div class="feature-grid" style="max-width: 900px; grid-template-columns: repeat(3, 1fr);">
+            <div class="feature-card" style="text-align: center; padding: 2.5rem 1.5rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">1️⃣</div>
+                <h3 style="justify-content: center;">Pick Your Niche</h3>
+                <p>Security or Solar - we find the right decision-makers</p>
+            </div>
+            <div class="feature-card" style="text-align: center; padding: 2.5rem 1.5rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">2️⃣</div>
+                <h3 style="justify-content: center;">AI Finds Leads</h3>
+                <p>Automatically discovers businesses with verified emails</p>
+            </div>
+            <div class="feature-card" style="text-align: center; padding: 2.5rem 1.5rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">3️⃣</div>
+                <h3 style="justify-content: center;">Close Deals</h3>
+                <p>AI sends personalized outreach - you just reply to interested leads</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- RESULTS / TESTIMONIALS -->
+<div style="padding: 4rem 2rem;">
+    <div class="container">
+        <h2 style="text-align: center; color: white; margin-bottom: 3rem;">Real Results from Real Clients</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto;">
+            <!-- Testimonial 1 -->
+            <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 2rem;">
+                <div style="color: #fbbf24; font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
+                <p style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem; font-style: italic;">
+                    "Booked 14 site visits in my first month. This thing actually works."
+                </p>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 45px; height: 45px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">JM</div>
+                    <div>
+                        <div style="color: white; font-weight: 700;">Johan M.</div>
+                        <div style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">Security Company Owner</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testimonial 2 -->
+            <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 2rem;">
+                <div style="color: #fbbf24; font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
+                <p style="color: rgba(255,255,255,0.8); margin-bottom: 1.5rem; font-style: italic;">
+                    "22 solar assessments booked in 6 weeks. Best investment I've made."
+                </p>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 45px; height: 45px; background: linear-gradient(135deg, #10b981, #06b6d4); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">TN</div>
+                    <div>
+                        <div style="color: white; font-weight: 700;">Thabo N.</div>
+                        <div style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">Solar Installation Business</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PRICING - Clear and Simple -->
+<div class="pricing" style="padding: 4rem 2rem;">
+    <div class="container">
+        <h2>Simple Pricing</h2>
+        <p style="text-align: center; color: rgba(255,255,255,0.6); margin-bottom: 3rem;">Start free. Upgrade when you're ready.</p>
+        
+        <div class="pricing-grid" style="max-width: 700px; margin: 0 auto; grid-template-columns: repeat(2, 1fr);">
+            <div class="pricing-card">
+                <h3>Free</h3>
+                <div class="price">R0<span>/month</span></div>
+                <ul>
+                    <li>3 automations/month</li>
+                    <li>Find leads automatically</li>
+                    <li>Send automated emails</li>
+                    <li style="color: #94a3b8;">Limited features</li>
+                </ul>
+                <a href="{{ url_for('signup') }}" class="btn btn-outline" style="width: 100%;">Start Free</a>
+            </div>
+            <div class="pricing-card featured">
+                <div style="background: var(--rainbow-gradient); color: white; padding: 4px 12px; border-radius: 100px; font-size: 0.7rem; font-weight: 800; display: inline-block; margin-bottom: 1rem;">MOST POPULAR</div>
+                <h3>Pro</h3>
+                <div class="price">R499<span>/month</span></div>
+                <ul>
+                    <li><strong>Unlimited</strong> automations</li>
+                    <li>Full contact details</li>
+                    <li>Export leads to CSV</li>
+                    <li>AI personalized outreach</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="{{ url_for('signup') }}" class="btn btn-primary" style="width: 100%;">Get Pro Now</a>
+            </div>
+        </div>
+        
+        <!-- Money Back Guarantee -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <div style="display: inline-flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7);">
+                <span style="font-size: 1.5rem;">🛡️</span>
+                <span>30-day money-back guarantee • Cancel anytime</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FINAL CTA - Bottom of Page -->
+<div style="padding: 5rem 2rem; text-align: center; background: linear-gradient(180deg, transparent 0%, rgba(139, 92, 246, 0.1) 100%);">
+    <div class="container" style="max-width: 600px;">
+        <h2 style="color: white; font-size: 2.5rem; margin-bottom: 1rem;">Ready to Get More Clients?</h2>
+        <p style="color: rgba(255,255,255,0.7); margin-bottom: 2rem; font-size: 1.1rem;">
+            Join 50+ Security & Solar companies already growing with AI
+        </p>
+        <a href="{{ url_for('signup') }}" class="btn btn-primary" style="padding: 1.25rem 3rem; font-size: 1.2rem; font-weight: 800;">
+            🚀 Start Free Now
+        </a>
+        <p style="color: rgba(255,255,255,0.5); margin-top: 1rem; font-size: 0.9rem;">
+            Setup takes less than 2 minutes
+        </p>
+    </div>
+</div>
+
+<style>
+@keyframes pulse-btn {
+    0%, 100% { box-shadow: 0 20px 60px rgba(255, 0, 128, 0.4); }
+    50% { box-shadow: 0 25px 70px rgba(255, 0, 128, 0.6); }
+}
+
+@media (max-width: 768px) {
+    .feature-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+{% endblock %}

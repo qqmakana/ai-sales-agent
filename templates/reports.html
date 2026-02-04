@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Reports - AI Sales Agent{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <div style="margin-bottom: 1.5rem;">
+        <h1 style="font-size: 2rem; font-weight: 800; color: #1e293b;">Reports</h1>
+        <p style="color: #64748b;">Weekly lead delivery and performance summary.</p>
+    </div>
+
+    <div class="glass-card">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #64748b; margin-bottom: 1rem;">📦 Weekly Delivery Summary</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align:center;">
+            <div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #1e293b;">{{ leads_count }}</div>
+                <div style="font-size: 0.85rem; color: #64748b;">Total leads in CRM</div>
+            </div>
+            <div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #1e293b;">Security + Solar</div>
+                <div style="font-size: 0.85rem; color: #64748b;">Primary niches</div>
+            </div>
+            <div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #16a34a;">Weekly</div>
+                <div style="font-size: 0.85rem; color: #64748b;">Delivery cadence</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #64748b; margin-bottom: 1rem;">📬 Schedule Weekly Report</h3>
+        <p style="color:#64748b; margin-bottom: 1rem;">Automatically send a weekly lead delivery report to your client.</p>
+        <form method="POST" action="{{ url_for('schedule_weekly_report') }}" style="display:grid; gap: 0.75rem; max-width: 480px;">
+            <input type="email" name="recipient_email" value="{{ current_user.email }}" placeholder="client@email.com"
+                style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem;">
+            <div style="display:flex; gap: 0.5rem;">
+                <select name="day" style="flex:1; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 12px;">
+                    <option value="mon" selected>Monday</option>
+                    <option value="tue">Tuesday</option>
+                    <option value="wed">Wednesday</option>
+                    <option value="thu">Thursday</option>
+                    <option value="fri">Friday</option>
+                </select>
+                <select name="scheduled_hour" style="flex:1; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 12px;">
+                    <option value="08">08</option>
+                    <option value="09" selected>09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                </select>
+                <select name="scheduled_minute" style="flex:1; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 12px;">
+                    <option value="00" selected>00</option>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                </select>
+            </div>
+            <button class="btn btn-secondary" type="submit">Schedule Weekly Report</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

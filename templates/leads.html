@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Leads - AI Sales Agent{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 1.5rem;">
+        <div>
+            <h1 style="font-size: 2rem; font-weight: 800; color: #1e293b; margin-bottom: 0.25rem;">Your Leads</h1>
+            <p style="color: #64748b;">Security + Solar prospects found automatically <span style="color: #16a34a; font-weight: 600;">(FREE - no API costs!)</span></p>
+        </div>
+        <div style="display:flex; gap: 0.5rem;">
+            <a href="{{ url_for('client_portal') }}" class="btn btn-secondary">Client Portal</a>
+            {% if can_access %}
+                <a href="{{ url_for('export_leads') }}" class="btn btn-primary">Export CSV</a>
+            {% else %}
+                <a href="{{ url_for('subscription') }}" class="btn btn-secondary">Upgrade to Export</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <div style="display:grid; gap: 1rem; margin-bottom: 1.5rem;">
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1rem; border-radius:12px;">
+                <div style="font-weight:700; margin-bottom:0.5rem;">➕ Add Lead (Manual)</div>
+                <form method="POST" action="{{ url_for('add_lead') }}" style="display:grid; gap:0.5rem;">
+                    <input name="name" placeholder="Name" required
+                        style="padding:0.7rem; border:2px solid #e2e8f0; border-radius:10px;">
+                    <input name="email" placeholder="Email"
+                        style="padding:0.7rem; border:2px solid #e2e8f0; border-radius:10px;">
+                    <input name="website" placeholder="Website"
+                        style="padding:0.7rem; border:2px solid #e2e8f0; border-radius:10px;">
+                    <select name="niche" style="padding:0.7rem; border:2px solid #e2e8f0; border-radius:10px;">
+                        <option>Security Services</option>
+                        <option>Solar & Renewable Energy</option>
+                    </select>
+                    <button class="btn btn-secondary" type="submit">Add Lead</button>
+                </form>
+            </div>
+
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; padding:1rem; border-radius:12px;">
+                <div style="font-weight:700; margin-bottom:0.5rem;">📤 Import CSV</div>
+                <form method="POST" action="{{ url_for('import_leads') }}" enctype="multipart/form-data" style="display:grid; gap:0.5rem;">
+                    <input type="file" name="file" accept=".csv" required>
+                    <div style="font-size:0.8rem; color:#64748b;">
+                        CSV headers: name,email,website,niche,status
+                    </div>
+                    <button class="btn btn-secondary" type="submit">Import CSV</button>
+                </form>
+            </div>
+        </div>
+
+        {% if not can_access %}
+            <div style="background: #fff7ed; border: 1px solid #fed7aa; padding: 0.75rem 1rem; border-radius: 12px; color: #9a3412; margin-bottom: 1rem;">
+                Upgrade to view full contact details and export leads.
+            </div>
+        {% endif %}
+        
+        <!-- Buy More Leads Prompt -->
+        <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(59, 130, 246, 0.1)); border: 1px solid rgba(16, 185, 129, 0.3); padding: 1rem 1.25rem; border-radius: 12px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.5rem;">🎯</span>
+                <div>
+                    <div style="font-weight: 700; color: #1e293b;">Need more leads?</div>
+                    <div style="font-size: 0.85rem; color: #64748b;">Get 50 verified leads instantly for just R99.99</div>
+                </div>
+            </div>
+            <a href="{{ url_for('subscription') }}" class="btn btn-primary" style="white-space: nowrap;">
+                Buy 50 Leads - R99.99
+            </a>
+        </div>
+
+        {% if leads %}
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Website</th>
+                        <th>Niche</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lead in leads %}
+                    <tr>
+                        <td>{{ lead.name }}</td>
+                        <td>
+                            {% if can_access or lead.is_unlocked %}
+                                {{ lead.email }}
+                            {% else %}
+                                {{ mask_email(lead.email) }}
+                            {% endif %}
+                        </td>
+                        <td>{{ lead.website }}</td>
+                        <td>{{ lead.niche }}</td>
+                        <td>{{ lead.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="text-align:center; color:#94a3b8; padding: 2rem;">
+                No leads yet. Run a lead search to populate your list.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

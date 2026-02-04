@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Client Leads - AI Sales Agent{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <div style="margin-bottom: 1.5rem;">
+        <div style="font-size: 0.85rem; color:#6b7280; text-transform: uppercase; letter-spacing: 1px;">AI Sales Agent</div>
+        <h1 style="font-size: 2rem; font-weight: 800; color: #1e293b;">Leads Delivered</h1>
+        <p style="color: #64748b;">Security + Solar prospects delivered to you.</p>
+    </div>
+
+    <div class="glass-card">
+        {% if leads %}
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Website</th>
+                        <th>Niche</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lead in leads %}
+                    <tr>
+                        <td>{{ lead.name }}</td>
+                        <td>{{ lead.email }}</td>
+                        <td>{{ lead.website }}</td>
+                        <td>{{ lead.niche }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="text-align:center; color:#94a3b8; padding: 2rem;">
+                No leads yet.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}New Action - AI Sales Agent{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto;">
+    
+    <!-- Back Button -->
+    <a href="{{ url_for('dashboard') }}" style="display: inline-flex; align-items: center; gap: 8px; color: #64748b; text-decoration: none; margin-bottom: 1.5rem; font-weight: 600;">
+        ← Back to Dashboard
+    </a>
+
+    <div class="glass-card" style="padding: 2rem;">
+        
+        <!-- Header -->
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+            <h1 style="font-size: 1.5rem; font-weight: 800; color: #1e293b; margin-bottom: 0.5rem;">What do you want to do?</h1>
+            <p style="color: #64748b;">Describe your task and set when to run it</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('create_automation') }}">
+            <input type="hidden" name="action_type" value="{{ request.args.get('type', '') }}">
+            
+            <!-- Goal/Task -->
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Your Task</label>
+                <textarea name="goal" rows="3" required 
+                    style="width: 100%; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; resize: none; background: white; color: #1e293b;"
+                    placeholder="Examples:
+• Send a test email to check if it works
+• Find security companies in Johannesburg
+• Find solar companies in Pretoria">{{ request.args.get('goal', '') }}</textarea>
+            </div>
+
+            <!-- Recipient Emails -->
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Send to (emails)</label>
+                <textarea name="recipient_email" rows="2" required 
+                    style="width: 100%; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; background: white; color: #1e293b; resize: none;"
+                    placeholder="email1@gmail.com, email2@gmail.com">{{ current_user.email }}</textarea>
+                <p style="font-size: 0.8rem; color: #64748b; margin-top: 0.5rem;">Separate multiple emails with commas</p>
+            </div>
+
+            <!-- Niche Selection (Leads only) -->
+            <div id="niche-section" style="display: none; margin-bottom: 1.5rem;">
+                <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Lead Niche</label>
+                <select name="niche"
+                    style="width: 100%; padding: 0.85rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; background: white; color: #1e293b; cursor: pointer;">
+                    <option value="Security Services">Security / Armed Response</option>
+                    <option value="Solar & Renewable Energy">Solar Installations</option>
+                    <option value="Multi-Niche">Security + Solar (Best ROI)</option>
+                </select>
+                <p style="font-size: 0.8rem; color: #64748b; margin-top: 0.5rem;">Used to target higher‑paying leads.</p>
+            </div>
+
+            <!-- Schedule Section -->
+            <div style="background: #f8fafc; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                <h3 style="font-size: 1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">⏰ Schedule (Optional)</h3>
+                
+                <!-- Frequency -->
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; font-weight: 600; color: #475569; margin-bottom: 0.5rem; font-size: 0.9rem;">How often?</label>
+                    <select name="frequency" id="frequency" onchange="toggleScheduleOptions()"
+                        style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; background: white; color: #1e293b; cursor: pointer;">
+                        <option value="once">Run once (now)</option>
+                        <option value="daily">Every day</option>
+                        <option value="weekly">Every week</option>
+                        <option value="custom">Custom days</option>
+                    </select>
+                </div>
+
+                <!-- Time Selection (shown for scheduled options) -->
+                <div id="time-section" style="display: none; margin-bottom: 1rem;">
+                    <label style="display: block; font-weight: 600; color: #475569; margin-bottom: 0.5rem; font-size: 0.9rem;">What time?</label>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <select name="scheduled_hour" style="flex: 1; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; background: white; color: #1e293b; cursor: pointer;">
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09" selected>09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                        </select>
+                        <span style="font-weight: 700; color: #1e293b;">:</span>
+                        <select name="scheduled_minute" style="flex: 1; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; background: white; color: #1e293b; cursor: pointer;">
+                            <option value="00" selected>00</option>
+                            <option value="15">15</option>
+                            <option value="30">30</option>
+                            <option value="45">45</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Days Selection (for weekly/custom) -->
+                <div id="days-section" style="display: none;">
+                    <label style="display: block; font-weight: 600; color: #475569; margin-bottom: 0.5rem; font-size: 0.9rem;">Which days?</label>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <label style="display: flex; align-items: center; gap: 6px; background: white; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer;">
+                            <input type="checkbox" name="days" value="mon"> Mon
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 6px; background: white; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer;">
+                            <input type="checkbox" name="days" value="tue"> Tue
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 6px; background: white; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer;">
+                            <input type="checkbox" name="days" value="wed"> Wed
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 6px; background: white; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer;">
+                            <input type="checkbox" name="days" value="thu"> Thu
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 6px; background: white; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer;">
+                            <input type="checkbox" name="days" value="fri"> Fri
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 6px; background: white; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer;">
+                            <input type="checkbox" name="days" value="sat"> Sat
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 6px; background: white; padding: 8px 12px; border-radius: 8px; border: 1px solid #e2e8f0; cursor: pointer;">
+                            <input type="checkbox" name="days" value="sun"> Sun
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Duration (for recurring) -->
+                <div id="duration-section" style="display: none; margin-top: 1rem;">
+                    <label style="display: block; font-weight: 600; color: #475569; margin-bottom: 0.5rem; font-size: 0.9rem;">For how long?</label>
+                    <select name="duration"
+                        style="width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; background: white; color: #1e293b; cursor: pointer;">
+                        <option value="7">1 week (7 days)</option>
+                        <option value="14">2 weeks (14 days)</option>
+                        <option value="30" selected>1 month (30 days)</option>
+                        <option value="90">3 months (90 days)</option>
+                        <option value="forever">Until I cancel</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem; font-weight: 700;">
+                <span id="submit-text">Run Now →</span>
+            </button>
+        </form>
+
+        <!-- Quick Examples -->
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
+            <p style="font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 1rem;">💡 Quick Examples (click to use):</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                <button type="button" onclick="document.querySelector('textarea[name=goal]').value='Send me a test email'" 
+                    style="background: #f1f5f9; border: none; padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.8rem; cursor: pointer; color: #475569;">
+                    Send test email
+                </button>
+                <button type="button" onclick="document.querySelector('textarea[name=goal]').value='Find security companies in Johannesburg'" 
+                    style="background: #f1f5f9; border: none; padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.8rem; cursor: pointer; color: #475569;">
+                    Find security leads
+                </button>
+                <button type="button" onclick="document.querySelector('textarea[name=goal]').value='Find solar companies in Pretoria'" 
+                    style="background: #f1f5f9; border: none; padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.8rem; cursor: pointer; color: #475569;">
+                    Find solar leads
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleScheduleOptions() {
+    const frequency = document.getElementById('frequency').value;
+    const timeSection = document.getElementById('time-section');
+    const daysSection = document.getElementById('days-section');
+    const durationSection = document.getElementById('duration-section');
+    const submitText = document.getElementById('submit-text');
+    
+    if (frequency === 'once') {
+        timeSection.style.display = 'none';
+        daysSection.style.display = 'none';
+        durationSection.style.display = 'none';
+        submitText.textContent = 'Run Now →';
+    } else if (frequency === 'daily') {
+        timeSection.style.display = 'block';
+        daysSection.style.display = 'none';
+        durationSection.style.display = 'block';
+        submitText.textContent = 'Schedule Daily →';
+    } else if (frequency === 'weekly' || frequency === 'custom') {
+        timeSection.style.display = 'block';
+        daysSection.style.display = 'block';
+        durationSection.style.display = 'block';
+        submitText.textContent = 'Schedule →';
+    }
+}
+
+function toggleNicheSection() {
+    const actionType = document.querySelector('input[name=action_type]')?.value;
+    const nicheSection = document.getElementById('niche-section');
+    if (actionType === 'leads') {
+        nicheSection.style.display = 'block';
+    } else {
+        nicheSection.style.display = 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    toggleScheduleOptions();
+    toggleNicheSection();
+});
+</script>
+{% endblock %}

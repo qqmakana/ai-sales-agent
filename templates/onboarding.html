@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Onboarding - AI Sales Agent{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <div style="margin-bottom: 1.5rem;">
+        <h1 style="font-size: 2rem; font-weight: 800; color: #1e293b;">Client Onboarding</h1>
+        <p style="color: #64748b;">Use this checklist to onboard a Security or Solar client fast.</p>
+    </div>
+
+    <div class="glass-card">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #64748b; margin-bottom: 1rem;">✅ Onboarding Checklist</h3>
+        <div style="display: grid; gap: 0.6rem;">
+            <label><input type="checkbox"> Confirm niche (Security or Solar)</label>
+            <label><input type="checkbox"> Define target location and ideal customer</label>
+            <label><input type="checkbox"> Agree on monthly lead target</label>
+            <label><input type="checkbox"> Collect brand info and value proposition</label>
+            <label><input type="checkbox"> Set pricing and payment method</label>
+            <label><input type="checkbox"> Launch first outreach campaign</label>
+        </div>
+    </div>
+
+    <div class="glass-card">
+        <h3 style="font-size: 1rem; font-weight: 700; color: #64748b; margin-bottom: 1rem;">📄 Contract Template (Quick)</h3>
+        <div style="background:#f8fafc; padding: 1rem; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 0.9rem; color:#1e293b;">
+            This agreement covers lead generation services for Security/Solar clients, including lead volumes, delivery cadence, payment terms, and cancellation policy.
+        </div>
+        <div style="margin-top: 1rem;">
+            <a href="{{ url_for('contract_pdf') }}" class="btn btn-secondary">Download Contract (PDF)</a>
+            <a href="{{ url_for('subscription') }}" class="btn btn-primary" style="margin-left: 0.5rem;">Set Pricing & Start</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="stripe-checkout-container" style="background: #f6f9fc; padding: 4rem 0;">
+    <div class="stripe-card" style="background: white; max-width: 450px; margin: 0 auto; padding: 2rem; border-radius: 8px; box-shadow: 0 15px 35px rgba(50,50,93,.1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div style="font-size: 1.5rem; font-weight: bold; color: #6772e5;">Stripe</div>
+            <div style="background: #ffb400; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; font-weight: bold;">TEST MODE</div>
+        </div>
+        
+        <h2>Subscribe to {{ tier|title }}</h2>
+        <p style="font-size: 2rem; font-weight: bold; color: #32325d; margin: 0.5rem 0 2rem;">
+            {% if tier == 'pro' %}$9.99{% else %}$29.99{% endif %}
+            <span style="font-size: 1rem; color: #6b7c93; font-weight: normal;">per month</span>
+        </p>
+        
+        <div class="form-row" style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-size: 0.9rem; color: #6b7c93; margin-bottom: 0.5rem;">Email</label>
+            <input type="text" value="{{ current_user.email }}" disabled style="width: 100%; padding: 10px; border: 1px solid #e6ebf1; border-radius: 4px;">
+        </div>
+        
+        <div class="form-row" style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-size: 0.9rem; color: #6b7c93; margin-bottom: 0.5rem;">Card Information</label>
+            <div style="display: flex; align-items: center; gap: 10px; border: 1px solid #e6ebf1; padding: 10px; border-radius: 4px;">
+                <input type="text" placeholder="4242 4242 4242 4242" disabled style="flex: 1; border: none; outline: none;">
+                <input type="text" placeholder="MM/YY" style="width: 60px; border: none; outline: none;" disabled>
+                <input type="text" placeholder="CVC" style="width: 40px; border: none; outline: none;" disabled>
+            </div>
+            <small style="color: #6b7c93; font-size: 0.8rem; display: block; margin-top: 5px;">Using Stripe Test Card (4242)</small>
+        </div>
+
+        <a href="{{ url_for('payment_success', tier=tier) }}" class="btn-stripe" style="display: block; width: 100%; background: #6772e5; color: white; text-align: center; padding: 12px; border-radius: 4px; font-weight: 600; text-decoration: none; margin-top: 2rem;">Pay and Subscribe</a>
+        
+        <div style="margin-top: 2rem; text-align: center; font-size: 0.8rem; color: #6b7c93;">
+            <p>Powered by Stripe | <a href="#" style="color: #6772e5;">Terms</a> | <a href="#" style="color: #6772e5;">Privacy</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - AI Sales Agent{% endblock %}
+
+{% block content %}
+<div style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 2rem;">
+    <div class="glass-card" style="max-width: 500px; width: 100%; text-align: center;">
+        <!-- Header -->
+        <div style="margin-bottom: 2rem;">
+            <div style="width: 70px; height: 70px; border-radius: 16px; background: var(--rainbow-gradient); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem;">
+                {% if tier == 'pro' %}⭐{% else %}👑{% endif %}
+            </div>
+            <h2 style="font-size: 1.75rem; font-weight: 900; margin-bottom: 0.5rem;">{{ tier|title }} Plan</h2>
+            <div style="font-size: 2.5rem; font-weight: 900;">
+                <span class="text-gradient">R{{ "%.0f"|format(amount) }}</span>
+                <span style="font-size: 1rem; color: #94a3b8; font-weight: 500;">/month</span>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div style="background: #f8fafc; padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; text-align: left;">
+            <div style="font-weight: 700; margin-bottom: 1rem; color: #1e293b;">What you'll get:</div>
+            {% if tier == 'pro' %}
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="margin-bottom: 0.75rem; display: flex; align-items: center; gap: 10px; color: #475569;">
+                    <span style="color: var(--primary-green);">✓</span> Unlimited AI Automations
+                </li>
+                <li style="margin-bottom: 0.75rem; display: flex; align-items: center; gap: 10px; color: #475569;">
+                    <span style="color: var(--primary-green);">✓</span> Advanced Lead Scraping
+                </li>
+                <li style="margin-bottom: 0.75rem; display: flex; align-items: center; gap: 10px; color: #475569;">
+                    <span style="color: var(--primary-green);">✓</span> AI Pitch Personalization
+                </li>
+                <li style="display: flex; align-items: center; gap: 10px; color: #475569;">
+                    <span style="color: var(--primary-green);">✓</span> Priority 24/7 Support
+                </li>
+            </ul>
+            {% else %}
+            <ul style="list-style: none; padding: 0; margin: 0;">
+                <li style="margin-bottom: 0.75rem; display: flex; align-items: center; gap: 10px; color: #475569;">
+                    <span style="color: var(--primary-green);">✓</span> Everything in Pro
+                </li>
+                <li style="margin-bottom: 0.75rem; display: flex; align-items: center; gap: 10px; color: #475569;">
+                    <span style="color: var(--primary-green);">✓</span> Team Collaboration
+                </li>
+                <li style="display: flex; align-items: center; gap: 10px; color: #475569;">
+                    <span style="color: var(--primary-green);">✓</span> Dedicated Account Manager
+                </li>
+            </ul>
+            {% endif %}
+        </div>
+
+        <!-- PayFast Form -->
+        <form action="{{ payfast_url }}" method="POST" id="payfast-form">
+            {% for key, value in payment_data.items() %}
+            <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endfor %}
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1rem;">
+                🔒 Pay R{{ "%.0f"|format(amount) }} with PayFast
+            </button>
+        </form>
+
+        <!-- Trust Badges -->
+        <div style="margin-top: 1.5rem; display: flex; justify-content: center; gap: 1.5rem; font-size: 0.75rem; color: #94a3b8;">
+            <span>🔒 SSL Secured</span>
+            <span>🇿🇦 SA Gateway</span>
+            <span>💳 PayFast</span>
+        </div>
+
+        <p style="margin-top: 1.5rem; font-size: 0.75rem; color: #94a3b8;">
+            By subscribing, you agree to our Terms of Service. Cancel anytime.
+        </p>
+
+        <a href="{{ url_for('subscription') }}" style="display: block; margin-top: 1rem; color: #64748b; font-size: 0.9rem;">
+            ← Back to plans
+        </a>
+    </div>
+</div>
+{% endblock %}
