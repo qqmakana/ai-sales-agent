@@ -40,11 +40,13 @@ print(f"[STARTUP] FREE Lead Scraping: ENABLED (no API costs!)")
 print(f"[STARTUP] Email configured: {'yes' if os.getenv('EMAIL_SENDER') else 'no'}")
 print(f"[STARTUP] LemonSqueezy payments: {'yes' if os.getenv('LEMONSQUEEZY_API_KEY') else 'no'}")
 
-# Rate limiting (scale protection)
+# Rate limiting (scale protection) - use memory if Redis not available
+redis_url = os.getenv("REDIS_URL", "")
+limiter_storage = redis_url if redis_url else "memory://"
 limiter = Limiter(
     get_remote_address,
     app=app,
-    storage_uri=os.getenv("REDIS_URL", "memory://"),
+    storage_uri=limiter_storage,
     default_limits=["200 per day", "60 per hour"],
 )
 
